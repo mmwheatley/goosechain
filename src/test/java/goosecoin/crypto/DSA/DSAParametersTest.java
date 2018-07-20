@@ -8,12 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DSAParametersTest {
 
-    static final DSAParameters param = new DSAParameters();
+    private static final BigInteger myP = DSAParameters.getP();
+    private static final BigInteger myQ = DSAParameters.getQ();
+    private static final BigInteger myG = DSAParameters.getG();
 
     @Test
     void getP()
     {
-        BigInteger myP = param.getP();
         assertNotNull(myP);
 
         // validation of parameter P
@@ -32,8 +33,6 @@ class DSAParametersTest {
     @Test
     void getQ()
     {
-        BigInteger myQ = param.getQ();
-        BigInteger myP = param.getP();
         assertNotNull(myQ);
 
         // validation of parameter Q
@@ -49,9 +48,6 @@ class DSAParametersTest {
     @Test
     void getG()
     {
-        BigInteger myG = param.getG();
-        BigInteger myP = param.getP();
-        BigInteger myQ = param.getQ();
         assertNotNull(myG);
 
         // validation of parameter g according to Appendix A.2 of FIPS 186-4: Partial Validation

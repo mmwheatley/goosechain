@@ -8,36 +8,23 @@ public class DSAParameters {
     private static final BigInteger Q = new BigInteger("959452661475451209325433595634941112150003865821");
     private static final BigInteger G = new BigInteger("94389192776327398589845326980349814526433869093412782345430946059206568804005181600855825906142967271872548375877738949875812540433223444968461350789461385043775029963900638123183435133537262152973355498432995364505138912569755859623649866375135353179362670798771770711847430626954864269888988371113567502852");
 
-    public BigInteger getP()
+
+    //private static final DSAParameters DSA_PARAMS_INSTANCE = new DSAParameters();
+     private DSAParameters () {}
+
+
+    public static BigInteger getP()
     {
         return P;
     }
 
-    public BigInteger getQ()
+    public static BigInteger getQ()
     {
         return Q;
     }
 
-    public BigInteger getG()
+    public static BigInteger getG()
     {
         return G;
-    }
-
-    @Override
-    public boolean equals(Object  obj)
-    {
-        if (!(obj instanceof DSAParameters)) {
-            return false;
-        }
-
-        DSAParameters pm = (DSAParameters)obj;
-
-        return (pm.getP().equals(P) && pm.getQ().equals(Q) && pm.getG().equals(G));
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return getP().hashCode() ^ getQ().hashCode() ^ getG().hashCode();
     }
 }

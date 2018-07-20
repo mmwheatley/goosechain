@@ -1,11 +1,15 @@
 package goosecoin.utils;
 
+import goosecoin.crypto.DSA.DSAKeyPair;
+import goosecoin.crypto.DSA.DSASignature;
 import org.junit.jupiter.api.Test;
 import javax.xml.bind.DatatypeConverter;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Key;
 import java.security.KeyPair;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,21 +23,26 @@ class DSAUtilsTest {
         Path path = Paths.get(uri.toURI());
         byte[] input = Files.readAllBytes(path);
 
-        KeyPair keyPair = DSAUtils.generateDSAKeyPair();
-        byte[] signature = DSAUtils.createDigitalSignature(input, keyPair.getPrivate());
-        System.out.println("Private Key: " + DatatypeConverter.printHexBinary(keyPair.getPrivate().getEncoded()));
-        System.out.println("Public Key: " + DatatypeConverter.printHexBinary(keyPair.getPublic().getEncoded()));
-        System.out.println("Signature: " + DatatypeConverter.printHexBinary(signature));
-        assertTrue(DSAUtils.verifyDigitalSignature(input, signature, keyPair.getPublic()));
+        DSAKeyPair keyPair = DSAUtils.generateDSAKeyPair();
+        DSASignature signature = DSAUtils.createDigitalSignature(input, keyPair.getPrivateKey());
+        System.out.println("Private Key: " + DatatypeConverter.printHexBinary(keyPair.getPrivateKey().toByteArray()));
+        System.out.println("Number of Bytes in the Private Key:" + keyPair.getPrivateKey().bitLength());
+        System.out.println("Public Key: " + DatatypeConverter.printHexBinary(keyPair.getPublicKey().toByteArray()));
+        System.out.println("Number of Bytes in the Public Key:" + keyPair.getPublicKey().bitLength());
+        //System.out.println("Signature: " + DatatypeConverter.printHexBinary(signature));
+        assertTrue(DSAUtils.verifyDigitalSignature(input, signature, keyPair.getPublicKey()));
 
     }
 
     @Test
-    void generateDSAKeyPair() throws Exception
+    void generateDSAKeyPair()
     {
-        KeyPair keyPair = DSAUtils.generateDSAKeyPair();
+        DSAKeyPair keyPair = DSAUtils.generateDSAKeyPair();
         assertNotNull(keyPair);
-        System.out.println("Private Key: " + DatatypeConverter.printHexBinary(keyPair.getPrivate().getEncoded()));
-        System.out.println("Public Key: " + DatatypeConverter.printHexBinary(keyPair.getPublic().getEncoded()));
+        System.out.println("Private Key: " + DatatypeConverter.printHexBinary(keyPair.getPrivateKey().toByteArray()));
+        System.out.println("Number of Bytes in the Private Key:" + keyPair.getPrivateKey().bitLength());
+        System.out.println("Public Key: " + DatatypeConverter.printHexBinary(keyPair.getPublicKey().toByteArray()));
+        System.out.println("Number of Bytes in the Public Key:" + keyPair.getPublicKey().bitLength());
+
     }
 }
