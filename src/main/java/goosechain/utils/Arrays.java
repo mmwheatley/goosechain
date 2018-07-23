@@ -1,4 +1,4 @@
-package goosecoin.utils;
+package goosechain.utils;
 
 import java.math.BigInteger;
 import java.util.NoSuchElementException;

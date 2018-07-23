@@ -1,4 +1,4 @@
-package goosecoin.crypto.DSA;
+package goosechain.crypto.DSA;
 
 import javax.management.openmbean.InvalidKeyException;
 import java.math.BigInteger;

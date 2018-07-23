@@ -1,4 +1,4 @@
-package goosecoin.utils;
+package goosechain.utils;
 
 /**
  * Utility methods for converting byte arrays into ints and longs, and back again.

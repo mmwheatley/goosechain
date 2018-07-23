@@ -1,8 +1,8 @@
-package goosecoin.crypto.digests;
+package goosechain.crypto.digests;
 
 // import goosecoin.crypto.ExtendedDigest;
-import goosecoin.utils.Arrays;
-import goosecoin.utils.Pack;
+import goosechain.utils.Arrays;
+import goosechain.utils.Pack;
 
 /**
  * implementation of Keccak based on following KeccakNISTInterface.c from http://keccak.noekeon.org/

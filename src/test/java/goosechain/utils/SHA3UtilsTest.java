@@ -1,4 +1,4 @@
-package goosecoin.utils;
+package goosechain.utils;
 
 import org.junit.jupiter.api.Test;
 

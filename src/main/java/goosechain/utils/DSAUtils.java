@@ -1,9 +1,9 @@
-package goosecoin.utils;
+package goosechain.utils;
 
-import goosecoin.crypto.DSA.DSAKeyPair;
-import goosecoin.crypto.DSA.DSAKeyPairGenerator;
-import goosecoin.crypto.DSA.DSASignature;
-import goosecoin.crypto.DSA.DSASigner;
+import goosechain.crypto.DSA.DSAKeyPair;
+import goosechain.crypto.DSA.DSAKeyPairGenerator;
+import goosechain.crypto.DSA.DSASignature;
+import goosechain.crypto.DSA.DSASigner;
 
 import java.math.BigInteger;
 import java.security.*;

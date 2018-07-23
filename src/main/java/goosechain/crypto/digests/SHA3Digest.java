@@ -1,4 +1,4 @@
-package goosecoin.crypto.digests;
+package goosechain.crypto.digests;
 
 
 /**

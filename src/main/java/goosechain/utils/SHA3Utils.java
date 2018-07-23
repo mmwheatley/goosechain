@@ -1,6 +1,6 @@
-package goosecoin.utils;
+package goosechain.utils;
 
-import goosecoin.crypto.digests.SHA3Digest;
+import goosechain.crypto.digests.SHA3Digest;
 
 import java.io.UnsupportedEncodingException;
 
