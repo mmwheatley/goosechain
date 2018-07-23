@@ -4,6 +4,7 @@ import goosechain.crypto.DSA.DSAKeyPair;
 import goosechain.crypto.DSA.DSASignature;
 import goosechain.utils.DSAUtils;
 import goosechain.utils.SHA3Utils;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
@@ -31,7 +32,7 @@ public class User {
         }
     }
 
-    private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.baby;
+    private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.java;
 
     private User() {}
 
@@ -99,7 +100,7 @@ public class User {
      */
     public Block mine(int amt, byte[] m, Difficulty d) throws IOException
     {
-        return this.mine(amt, m, 0, d);
+        return this.mine(amt, m, BigInteger.ZERO, d);
     }
 
     /**
@@ -111,7 +112,7 @@ public class User {
      * @param d The number of leading zeros to mine.
      * @return A new block that has been mined.
      */
-    public Block mine(int amt, byte[] m, int nonce, Difficulty d) throws IOException {
+    public Block mine(int amt, byte[] m, BigInteger nonce, Difficulty d) throws IOException {
         // TODO: Add Timeout
 
         ByteArrayOutputStream amountStream = new ByteArrayOutputStream( );
@@ -125,18 +126,22 @@ public class User {
         do {
             outputStream.write(SHA3Utils.digest(amount));
             outputStream.write(m);
-            outputStream.write(nonce);
+            outputStream.write(nonce.toByteArray());
 
             transaction = new BigInteger(SHA3Utils.digest(outputStream.toByteArray()));
 
+            System.out.println(DatatypeConverter.printHexBinary(transaction.toByteArray()) + ", " + transaction.bitLength());
+
             for(int i=0; i < d.getDifficulty(); i++) {
-                if(transaction.testBit(transaction.bitLength()-i)) {
+                if(transaction.testBit(223-i)) {
                     difficultyHasNotBeenMet = true;
                     break;
                 }
+                difficultyHasNotBeenMet = false;
             }
 
             outputStream.reset();
+            nonce = nonce.add(BigInteger.ONE);
         } while(difficultyHasNotBeenMet);
 
         return new Block(sign(m), transaction.toByteArray());
