@@ -7,6 +7,10 @@ import java.lang.reflect.Type;
 
 public class Block {
 
+    /**
+     * Private class to give custom printing behaviour for Byte Arrays
+     * Byte arrays like Transactions will be pretty printed in Hex Binary Strings when written to file.
+     */
     private static class ByteArrayToHexTypeAdapter implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
         public byte[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             return DatatypeConverter.parseHexBinary(json.getAsString());

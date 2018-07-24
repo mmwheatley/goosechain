@@ -14,12 +14,11 @@ import java.math.BigInteger;
 
 public class User {
 
-    // singleton instance of a gson builder for User class
-    private static final Gson userGsonBuilder = new GsonBuilder().setPrettyPrinting().create();
-
-    public String name;
-    private DSAKeyPair dsaKeyPair;
-
+    /**
+     * enum that enumerates the various difficulty levels
+     * in mining blocks. enum fields represent the number of leading
+     * zeros that a message digest must have for the transaction to be accepted
+     */
     protected enum Difficulty {
         baby(8),
         java(24),
@@ -37,6 +36,12 @@ public class User {
     }
 
     private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.baby;
+
+    // singleton instance of a gson builder for User class
+    private static final Gson userGsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+
+    public String name;
+    private DSAKeyPair dsaKeyPair;
 
     private User() {}
 
@@ -129,7 +134,7 @@ public class User {
         byte[] amount = amountStream.toByteArray();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
-        BigInteger transaction;
+        byte[] transaction;
         boolean difficultyHasNotBeenMet = false;
 
         do {
@@ -137,12 +142,12 @@ public class User {
             outputStream.write(m);
             outputStream.write(nonce.toByteArray());
 
-            transaction = new BigInteger(SHA3Utils.digest(outputStream.toByteArray()));
+            transaction = SHA3Utils.digest(outputStream.toByteArray());
 
-            //System.out.println(DatatypeConverter.printHexBinary(transaction.toByteArray()) + ", " + transaction.bitLength());
+            System.out.println(DatatypeConverter.printHexBinary(transaction) + ", " + transaction.length);
 
-            for(int i=0; i < d.getDifficulty(); i++) {
-                if(transaction.testBit(223-i)) {
+            for(int i=0; i < d.getDifficulty()/8; i++) {
+                if((transaction[i] & 0xFF) != (byte)0) {
                     difficultyHasNotBeenMet = true;
                     break;
                 }
@@ -153,7 +158,7 @@ public class User {
             nonce = nonce.add(BigInteger.ONE);
         } while(difficultyHasNotBeenMet);
 
-        return new Block(m, sign(m), transaction.toByteArray());
+        return new Block(m, sign(m), transaction);
 
     }
 }
