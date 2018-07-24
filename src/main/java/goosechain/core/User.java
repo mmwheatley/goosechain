@@ -1,10 +1,11 @@
 package goosechain.core;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import goosechain.crypto.DSA.DSAKeyPair;
 import goosechain.crypto.DSA.DSASignature;
 import goosechain.utils.DSAUtils;
 import goosechain.utils.SHA3Utils;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
@@ -13,11 +14,14 @@ import java.math.BigInteger;
 
 public class User {
 
+    // singleton instance of a gson builder for User class
+    private static final Gson userGsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+
     public String name;
     private DSAKeyPair dsaKeyPair;
 
     protected enum Difficulty {
-        baby(4),
+        baby(8),
         java(24),
         cpp(32);
 
@@ -32,7 +36,7 @@ public class User {
         }
     }
 
-    private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.java;
+    private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.baby;
 
     private User() {}
 
@@ -70,6 +74,11 @@ public class User {
     public BigInteger getPublicKey()
     {
         return dsaKeyPair.getPublicKey();
+    }
+
+    public static Gson getGsonInstance()
+    {
+        return userGsonBuilder;
     }
 
     public DSASignature sign(byte[] message)
@@ -130,7 +139,7 @@ public class User {
 
             transaction = new BigInteger(SHA3Utils.digest(outputStream.toByteArray()));
 
-            System.out.println(DatatypeConverter.printHexBinary(transaction.toByteArray()) + ", " + transaction.bitLength());
+            //System.out.println(DatatypeConverter.printHexBinary(transaction.toByteArray()) + ", " + transaction.bitLength());
 
             for(int i=0; i < d.getDifficulty(); i++) {
                 if(transaction.testBit(223-i)) {
@@ -144,7 +153,7 @@ public class User {
             nonce = nonce.add(BigInteger.ONE);
         } while(difficultyHasNotBeenMet);
 
-        return new Block(sign(m), transaction.toByteArray());
+        return new Block(m, sign(m), transaction.toByteArray());
 
     }
 }

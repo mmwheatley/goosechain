@@ -54,17 +54,4 @@ public class SHA3Utils {
         return output;
     }
 
-
-/*
-    public static String encode(byte [] bytes, boolean bouncyencoder) {
-        if (bouncyencoder)
-            return Hex.toHexString(bytes);
-        else {
-            BigInteger bigInt = new BigInteger(1, bytes);
-            return bigInt.toString(16);
-        }
-    }
-*/
-
-
 }

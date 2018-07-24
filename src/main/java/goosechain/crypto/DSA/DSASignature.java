@@ -17,11 +17,11 @@ public class DSASignature {
 
     @Override
     public String toString() {
-        return "{" +
+        return "\"Signature\": {" +
                 System.lineSeparator() +
-                "r: " + r.toString() +
+                "\t"+"\"r\": " + r.toString() +
                 System.lineSeparator() +
-                "s: " + s.toString() +
+                "\t"+"\"s\": " + s.toString() +
                 System.lineSeparator() +
                 "}";
 
