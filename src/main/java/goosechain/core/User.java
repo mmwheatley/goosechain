@@ -35,7 +35,7 @@ public class User {
         }
     }
 
-    private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.baby;
+    private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.java;
 
     // singleton instance of a gson builder for User class
     private static final Gson userGsonBuilder = new GsonBuilder().setPrettyPrinting().create();
@@ -43,10 +43,10 @@ public class User {
     public String name;
     private DSAKeyPair dsaKeyPair;
 
-    private User() {}
+    private User() {
+    }
 
-    public User(String name)
-    {
+    public User(String name) {
         this.name = name;
         this.dsaKeyPair = DSAUtils.generateDSAKeyPair();
     }
@@ -60,10 +60,9 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof User) {
+        if (obj instanceof User) {
             return dsaKeyPair.getPublicKey().equals(((User) obj).dsaKeyPair.getPublicKey());
-        }
-        else return false;
+        } else return false;
     }
 
     @Override
@@ -71,69 +70,60 @@ public class User {
         return Integer.parseInt(SHA3Utils.digest(this.dsaKeyPair.getPublicKey().toByteArray()).toString());
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public BigInteger getPublicKey()
-    {
+    public BigInteger getPublicKey() {
         return dsaKeyPair.getPublicKey();
     }
 
-    public static Gson getGsonInstance()
-    {
+    public static Gson getGsonInstance() {
         return userGsonBuilder;
     }
 
-    public DSASignature sign(byte[] message)
-    {
+    public DSASignature sign(byte[] message) {
         return DSAUtils.createDigitalSignature(message, dsaKeyPair.getPrivateKey());
     }
 
     /**
-     * @brief mine a new block on the blockchain with default difficulty (24 leading zeroes)
-     * and starting the nonce at 0
-     *
-     * @param amt The amount of goosecoin the Transaction uses. 1 for all Blocks in this Project
+     * @param amt     The amount of goosecoin the Transaction uses. 1 for all Blocks in this Project
      * @param message The message digest comprosing pk_current||pk_next||amt
      * @return A new block that has been mined.
+     * @brief mine a new block on the blockchain with default difficulty (24 leading zeroes)
+     * and starting the nonce at 0
      */
-    public Block mine(int amt, byte[] message) throws IOException
-    {
+    public Block mine(int amt, byte[] message) throws IOException {
         return this.mine(amt, message, DEFAULT_DIFFCULTY);
     }
 
     /**
-     * @brief mine a new block on the blockchain with custom difficulty and starting the nonce 0
-     *
      * @param amt The amount of goosecoin the Transaction uses. 1 for all Blocks in this Project
-     * @param m The message digest comprosing pk_current||pk_next||amt
-     * @param d The number of leading zeros to mine.
+     * @param m   The message digest comprosing pk_current||pk_next||amt
+     * @param d   The number of leading zeros to mine.
      * @return A new block that has been mined.
+     * @brief mine a new block on the blockchain with custom difficulty and starting the nonce 0
      */
-    public Block mine(int amt, byte[] m, Difficulty d) throws IOException
-    {
+    public Block mine(int amt, byte[] m, Difficulty d) throws IOException {
         return this.mine(amt, m, BigInteger.ZERO, d);
     }
 
     /**
-     * @brief mine a new block on the blockchain with custom difficulty and custom nonce
-     *
-     * @param amt The amount of goosecoin the Transaction uses. 1 for all Blocks in this Project
-     * @param m The message digest comprosing pk_current||pk_next||amt
+     * @param amt   The amount of goosecoin the Transaction uses. 1 for all Blocks in this Project
+     * @param m     The message digest comprising pk_current||pk_next||amt
      * @param nonce A nonce for finding the required leading zeros
-     * @param d The number of leading zeros to mine.
+     * @param d     The number of leading zeros to mine.
      * @return A new block that has been mined.
+     * @brief mine a new block on the blockchain with custom difficulty and custom nonce
      */
     public Block mine(int amt, byte[] m, BigInteger nonce, Difficulty d) throws IOException {
         // TODO: Add Timeout
 
-        ByteArrayOutputStream amountStream = new ByteArrayOutputStream( );
+        ByteArrayOutputStream amountStream = new ByteArrayOutputStream();
         amountStream.write(amt);
         byte[] amount = amountStream.toByteArray();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] transaction;
         boolean difficultyHasNotBeenMet = false;
 
@@ -146,8 +136,8 @@ public class User {
 
             //System.out.println(DatatypeConverter.printHexBinary(transaction) + ", " + transaction.length);
 
-            for(int i=0; i < d.getDifficulty()/8; i++) {
-                if((transaction[i] & 0xFF) != (byte)0) {
+            for (int i = 0; i < d.getDifficulty() / 8; i++) {
+                if ((transaction[i] & 0xFF) != (byte) 0) {
                     difficultyHasNotBeenMet = true;
                     break;
                 }
@@ -156,7 +146,7 @@ public class User {
 
             outputStream.reset();
             nonce = nonce.add(BigInteger.ONE);
-        } while(difficultyHasNotBeenMet);
+        } while (difficultyHasNotBeenMet);
 
         return new Block(m, sign(m), transaction);
 

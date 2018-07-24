@@ -3,6 +3,7 @@ package goosechain.core;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import goosechain.utils.DSAUtils;
+import goosechain.utils.SHA3Utils;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -10,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class GooseChain {
         List<Block> blockChain;
         Gson gson;
         Writer fw;
+        Instant start, end;
 
         /**
          * UserList routine
@@ -83,40 +87,50 @@ public class GooseChain {
         byte[] message;
 
         // User 1 mining
-
+        System.out.println("User 1 is Mining!");
         outputStream.write(userList.get(0).getPublicKey().toByteArray());
         outputStream.write(userList.get(1).getPublicKey().toByteArray());
         outputStream.write(1);
 
-        message = outputStream.toByteArray();
+        message = SHA3Utils.digest(outputStream.toByteArray());
 
+        start = Instant.now();
         blockChain.add(userList.get(0).mine(1, message));
+        end = Instant.now();
+        System.out.println("User 1 Finished mining in: "+ Duration.between(start, end).toMillis());
+        System.out.println(blockChain.get(0));
 
         // User 2 verifies
         if(DSAUtils.verifyDigitalSignature(
                 blockChain.get(0).getMessage(),
                 blockChain.get(0).getDsaSignature(),
                 userList.get(0).getPublicKey())) {
-            System.out.println("User 2 Successfully Verified User 1's Signature");
+            System.out.println("User 2 Successfully Verified User 1's Signature.");
         } else {
-            System.out.println("User 2 was not able to verify the Signature of User 1");
+            System.out.println("User 2 was not able to verify the Signature of User 1.");
         }
 
         // User 2 mining
+        System.out.println("User 2 is Mining!");
         outputStream.reset();
 
         outputStream.write(userList.get(1).getPublicKey().toByteArray());
         outputStream.write(userList.get(2).getPublicKey().toByteArray());
         outputStream.write(1);
 
-        message = outputStream.toByteArray();
+        message = SHA3Utils.digest(outputStream.toByteArray());
 
+        start = Instant.now();
         blockChain.add(userList.get(1).mine(1, message));
+        end = Instant.now();
+        System.out.println("User 2 Finished mining in: "+ Duration.between(start, end).toMillis());
+        System.out.println(blockChain.get(0));
 
         // Write out the blockchain to file
+        System.out.println("Writing Blockchain to JSON...");
         fw = new FileWriter(BLOCK_CHAIN_PATH.toString());
         fw.write(gson.toJson(blockChain));
         fw.close();
-
+        System.out.println("Done.");
     }
 }
