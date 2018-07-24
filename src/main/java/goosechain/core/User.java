@@ -144,7 +144,7 @@ public class User {
 
             transaction = SHA3Utils.digest(outputStream.toByteArray());
 
-            System.out.println(DatatypeConverter.printHexBinary(transaction) + ", " + transaction.length);
+            //System.out.println(DatatypeConverter.printHexBinary(transaction) + ", " + transaction.length);
 
             for(int i=0; i < d.getDifficulty()/8; i++) {
                 if((transaction[i] & 0xFF) != (byte)0) {
