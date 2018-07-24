@@ -19,9 +19,9 @@ class DSAUtilsTest {
         DSAKeyPair keyPair = DSAUtils.generateDSAKeyPair();
         assertNotNull(keyPair);
         System.out.println("Private Key: " + DatatypeConverter.printHexBinary(keyPair.getPrivateKey().toByteArray()));
-        System.out.println("Number of bits in the Private Key:" + keyPair.getPrivateKey().bitLength());
+        System.out.println("Number of bits in the Private Key:" + keyPair.getPrivateKey().toByteArray().length*8 /*keyPair.getPrivateKey().bitLength()*/);
         System.out.println("Public Key: " + DatatypeConverter.printHexBinary(keyPair.getPublicKey().toByteArray()));
-        System.out.println("Number of bits in the Public Key:" + keyPair.getPublicKey().bitLength());
+        System.out.println("Number of bits in the Public Key:" + keyPair.getPublicKey().toByteArray().length*8 /*keyPair.getPublicKey().bitLength()*/);
 
     }
 
@@ -35,10 +35,10 @@ class DSAUtilsTest {
         DSAKeyPair keyPair = DSAUtils.generateDSAKeyPair();
         DSASignature signature = DSAUtils.createDigitalSignature(input, keyPair.getPrivateKey());
         System.out.println("Private Key: " + DatatypeConverter.printHexBinary(keyPair.getPrivateKey().toByteArray()));
-        System.out.println("Number of bits in the Private Key:" + keyPair.getPrivateKey().bitLength());
+        System.out.println("Number of bits in the Private Key:" + keyPair.getPrivateKey().toByteArray().length*8 /*keyPair.getPrivateKey().bitLength()*/);
         System.out.println("Public Key: " + DatatypeConverter.printHexBinary(keyPair.getPublicKey().toByteArray()));
-        System.out.println("Number of bits in the Public Key:" + keyPair.getPublicKey().bitLength());
-        //System.out.println("Signature: " + DatatypeConverter.printHexBinary(signature));
+        System.out.println("Number of bits in the Public Key:" + keyPair.getPublicKey().toByteArray().length*8 /*keyPair.getPublicKey().bitLength()*/);
+        System.out.println("Signature: " + signature);
         assertTrue(DSAUtils.verifyDigitalSignature(input, signature, keyPair.getPublicKey()));
 
     }

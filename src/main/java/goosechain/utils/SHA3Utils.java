@@ -34,7 +34,7 @@ public class SHA3Utils {
         return digest(input, DEFAULT);
     }
 
-    public static byte[] digest(String string, Size s)  {
+    public static byte[] digest(String string, Size s) {
         Size size = s == null ? DEFAULT : s;
 
         String text = string != null ? string : "null";
@@ -48,7 +48,7 @@ public class SHA3Utils {
 
     public static byte[] digest(byte[] input, Size s) {
         SHA3Digest md = new SHA3Digest(s.getValue());
-        byte[] output = new byte[s.getValue()/8];
+        byte[] output = new byte[s.getValue() / 8];
         md.update(input, 0, input.length);
         md.doFinal(output, 0);
         return output;
