@@ -124,7 +124,7 @@ public class GooseChain {
         blockChain.add(userList.get(1).mine(1, message));
         end = Instant.now();
         System.out.println("User 2 Finished mining in: "+ Duration.between(start, end).toMillis());
-        System.out.println(blockChain.get(0));
+        System.out.println(blockChain.get(1));
 
         // Write out the blockchain to file
         System.out.println("Writing Blockchain to JSON...");

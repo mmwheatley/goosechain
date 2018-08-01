@@ -35,7 +35,7 @@ public class User {
         }
     }
 
-    private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.java;
+    private static final Difficulty DEFAULT_DIFFCULTY = Difficulty.baby;
 
     // singleton instance of a gson builder for User class
     private static final Gson userGsonBuilder = new GsonBuilder().setPrettyPrinting().create();
